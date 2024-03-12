@@ -1,10 +1,10 @@
 # Good-Reads-Book-Collection-Data-Cleaning-With-MYSQL
 
-### This is a breakdown of how I resolved issues such as incorrect formatting, empty rows, missing values, and incorrect values using MYSQL during the data cleaning phase of my project [Goodreads Book Analysis](https://www.kaggle.com/datasets/cristaliss/ultimate-book-collection-top-100-books-up-to-2023).
+This is a breakdown of how I resolved issues such as incorrect formatting, empty rows, missing values, and incorrect values using MYSQL during the data cleaning phase of my project [Goodreads Book Analysis](https://www.kaggle.com/datasets/cristaliss/ultimate-book-collection-top-100-books-up-to-2023).
 
 ## LOADING THE DATA
 
-### In this phase, I had to import the data into MYSQL, but first I had to create the database.
+In this phase, I had to import the data into MYSQL, but first I had to create the database.
 
 ```sql
 -- Create the 'goodreads' database
@@ -12,7 +12,7 @@ CREATE DATABASE goodreads;
 USE goodreads
 ```
 
-### After that, I disabled 'Autocommit' to avoid automatically saving changes, and disabled 'Safe updates' in order to make changes to the table if needed.
+After that, I disabled 'Autocommit' to avoid automatically saving changes, and disabled 'Safe updates' in order to make changes to the table if needed.
 
 ```sql
 -- Disable autocommit and safe updates for this session
@@ -20,14 +20,14 @@ SET autocommit = 0;
 SET sql_safe_updates = 0;
 ```
 
-### I also set up a 'Rollback' function to basically undo any unwanted changes made to the dataset.
+I also set up a 'Rollback' function to basically undo any unwanted changes made to the dataset.
 
 ``` sql 
 rollback;
 ```
 
 
-### Using the 'Create Table' function, I created the columns for the Goodreads dataset. Aside from the 'book_no' which was the primary key, every other column was set to the TEXT datatype in order to safely & quickly import the dataset.
+Using the 'Create Table' function, I created the columns for the Goodreads dataset. Aside from the 'book_no' which was the primary key, every other column was set to the TEXT datatype in order to safely & quickly import the dataset.
 
 ``` sql
 -- Create the 'goodreads_data' table
@@ -48,7 +48,7 @@ CREATE TABLE goodreads_data (
 );
 ```
 
-### The dataset was then loaded into the database through the LOAD DATA INFILE method, which is faster than using the import wizard option.
+The dataset was then loaded into the database through the LOAD DATA INFILE method, which is faster than using the import wizard option.
 
 ``` sql
 -- Load data from CSV file into the 'goodreads_data' table
@@ -61,7 +61,7 @@ IGNORE 1 LINES;
 ```
 ## WRONG DATE FORMAT
 
-### The 'publication_date' column had date values in the wrong format, so new columns 'pub_date' & 'years' were created to insert the corrected date format and to extract the year of the date respectively.
+The 'publication_date' column had date values in the wrong format, so new columns 'pub_date' & 'years' were created to insert the corrected date format and to extract the year of the date respectively.
 
 ``` sql
 -- Add new date columns and populate them based on different date formats
@@ -79,7 +79,7 @@ END;
 
 ## INCORRECT VALUES, NULL & EMPTY ROWS
 
-### The 'Release_number' & 'format' column had INCORRECT VALUES that were unwanted, the rows having these INCORRECT VALUES were set to NULL.
+The 'Release_number' & 'format' column had INCORRECT VALUES that were unwanted, the rows having these INCORRECT VALUES were set to NULL.
 
 ``` sql
 -- Update 'Release_number' to NULL for specific cases
@@ -108,7 +108,7 @@ SET format = NULL
 WHERE format LIKE '% pages';
 ```
 
-### Other columns with similar issues were fixed by using the REPLACE function which led to having EMPTY ROWS in some of the columns, which were then set to NULL.
+Other columns with similar issues were fixed by using the REPLACE function which led to having EMPTY ROWS in some of the columns, which were then set to NULL.
 
 ``` sql
 -- Replace single quotes in 'Genres' column
@@ -155,7 +155,7 @@ SET Rating = NULL
 WHERE Rating = '';
 ```
 
-### The correctly formatted date values in the 'pub_date' column still had INCORRECT VALUES with some of the dates turning a date of "1966-01-01" into "2066-01-01", these issues were addressed and the year of the 'pub_date' column was extracted into the 'years' column successfully.
+The correctly formatted date values in the 'pub_date' column still had INCORRECT VALUES with some of the dates turning a date of "1966-01-01" into "2066-01-01", these issues were addressed and the year of the 'pub_date' column was extracted into the 'years' column successfully.
 
 ``` sql
 -- Correcting date values for specific years
@@ -206,7 +206,7 @@ SET Years = YEAR(Pub_date);
 
 ## MISSING VALUES
 
-### The 'Author' column had a single MISSING VALUE for one of the books, after doing research and found the author related to the book, the changes were made.
+The 'Author' column had a single MISSING VALUE for one of the books, after doing research and found the author related to the book, the changes were made.
 
 ``` sql
 -- Update specific record's author
@@ -215,7 +215,7 @@ SET Author = 'Isabel Allende'
 WHERE Book = 'The Infinite Plan';
 ```
 
-### A similar solution was made for the 'pub_date' column that had a single MISSING VALUE.
+A similar solution was made for the 'pub_date' column that had a single MISSING VALUE.
 
 ``` sql
 -- Correcting the publication date for a specific record
@@ -224,7 +224,7 @@ SET Pub_date = '2020-07-31'
 WHERE Series = 'VanWest' AND BOOK = 'The Present';
 ```
 
-### The 'ratings' column on the other hand had multiple MISSING VALUES, so rather than leaving them empty, they were filled up with the average rating of the values in the same column.
+The 'ratings' column on the other hand had multiple MISSING VALUES, so rather than leaving them empty, they were filled up with the average rating of the values in the same column.
 
 ``` sql
 -- Fill up empty rating rows with an average rating
@@ -233,7 +233,7 @@ SET rating = 4.02
 WHERE rating IS NULL;
 ```
 
-### The 'format' column also had multiple MISSING VALUES, research was made to correct this but unfortunately.
+The 'format' column also had multiple MISSING VALUES, research was made to correct this but unfortunately.
 
 ``` sql
 -- fill up empty format rows with the correct format
@@ -257,7 +257,7 @@ WHERE format IS NULL;
 
 ## FIXING DATA TYPE
 
-### After the cleaning was completed and cross-checked, the columns were  assigned their correct DATA TYPE 
+After the cleaning was completed and cross-checked, the columns were  assigned their correct DATA TYPE 
 
 ``` sql
 -- Correct the datatype of each column
@@ -274,13 +274,13 @@ MODIFY COLUMN Rating DOUBLE,
 MODIFY COLUMN Number_of_voters INT;
 ```
 
-### Using the COMMIT function, the changes made to the table were saved.
+Using the COMMIT function, the changes made to the table were saved.
 
 ``` sql
 Commit;
 ```
 
-### NOTE: Even after cleaning the dataset, there were still null values, most of them were necessary for their specific columns as they were not meant to have values while the remaining were missing values. The missing values had little to no effect on the insights that were found, hence they were left null.
+NOTE: Even after cleaning the dataset, there were still null values, most of them were necessary for their specific columns as they were not meant to have values while the remaining were missing values. The missing values had little to no effect on the insights that were found, hence they were left null.
 
 
 
